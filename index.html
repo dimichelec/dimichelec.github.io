@@ -9,7 +9,13 @@
 	top:0; left:0;
 	height:1200px; width:1600px;
 }
-#odds_0 {
+.odds_frame {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
+}
+.ads_frame {
 	border-width: 0;
 	position:absolute;
 	top:40px; left:40px;
@@ -18,17 +24,44 @@
 </style>
 
 <iframe id='frame'></iframe>
-<iframe id='odds_0'></iframe>
-
+<iframe id='odds_0' class='odds_frame'></iframe>
+<iframe id='odds_1' class='odds_frame'></iframe>
+<iframe id='ads_0'  class='ads_frame'></iframe>
 
 <script>
 
+var odds_rotation_time = 5;	// in seconds
+var odds_rotation = [
+    //'college_football',
+    //'superbowl_futures'
+    'pro_basketball',
+    'nba_futures',
+    'nba_east_futures',
+    'nba_west_futures',
+    'college_basketball',
+    'pro_hockey',
+    'pro_tennis',
+    'pro_baseball',
+    'mlb_world_series_futures',
+    'pro_boxing',
+    'ufc_mma'
+];
+
+var odds_cache_toggle = false;
+var odds_rotation_index = 0;
+
 var frame = document.getElementById('frame');
+var odds_0 = document.getElementById('odds_0');
+var odds_1 = document.getElementById('odds_1');
+var ads_0 = document.getElementById('ads_0');
+
 frame.style.backgroundImage = "url('../img/rotator-frame.png')";
 frame.style.zIndex = 999; // front
 
-var odds_0 = document.getElementById('odds_0');
 odds_0.style.zIndex = 0; // middle
+odds_1.style.zIndex = -1; // back
+ads_0.style.zIndex = -2; // wayback
+
 
 var main_url =
    "https://c3-static.kambi.com/digital-signage-client/?"
@@ -51,8 +84,32 @@ sports['nba_east_futures'] = "eventType=competition&couponId=260&daysInAdvance=3
 sports['nba_west_futures'] = "eventType=competition&couponId=261&daysInAdvance=365";
 sports['mlb_world_series_futures'] = "eventType=competition&couponId=262&daysInAdvance=365";
 
-odds_0.src = main_url + sports['pro_baseball'];
+odds_0.src = main_url + sports[odds_rotation[odds_rotation_index]];
+incOddsRotation();
+odds_1.src = main_url + sports[odds_rotation[odds_rotation_index]];
+incOddsRotation();
 
+setTimeout(rotateOdds, odds_rotation_time*1000);
+
+
+function changeDisplay() {
+	if (odds_cache_toggle) {
+		odds_1.style.zIndex = 0;
+		odds_0.style.zIndex = -1;
+		odds_0.src = main_url + sports[odds_rotation[odds_rotation_index]];
+	} else {
+	}
+	odds_cache_toggle = !odds_cache_toggle;
+	incOddsRotation();
+	setTimeout(rotateOdds, odds_rotation_time*1000);
+}
+
+function incOddsRotation() {
+	odds_rotation_index++;
+	if (odds_rotation_index >= odds_rotation.length) {
+		odds_rotation_index = 0;
+	}
+}
 
 </script>
 

@@ -3,22 +3,53 @@
 <meta charset="UTF-8">
 
 <style>
-#main {
+#frame {
 	border-width: 0;
 	position:absolute;
 	top:0; left:0;
 	height:1200px; width:1600px;
-	transform: scale(0.5);
+}
+#odds_0 {
+	border-width: 0;
+	position:absolute;
+	top:50px; left:50px;
+	height:1100px; width:1500px;
 }
 </style>
 
-<iframe id='main'></iframe>
+<iframe id='frame'></iframe>
+<iframe id='odds_0'></iframe>
 
 
 <script>
 
-var frame = document.getElementById('main');
+var frame = document.getElementById('frame');
 frame.style.backgroundImage = "url('../img/rotator-frame.png')";
+
+var odds_0 = document.getElementById('odds_0');
+
+var main_url =
+   "https://c3-static.kambi.com/digital-signage-client/?"
+ + "offering=dkusnjrl&branding=draftkings&"
+ + "market=US&oddsFormat=american&locale=en_US&env=prod&"
+ + "loop=true&loopInterval=4000&";
+var sports = [];
+sports['pro_football'] = "sport=american_football&title=PRO%20FOOTBALL&betofferColumns=1,2,3,4";
+sports['college_football'] = "sport=american_football&couponId=170&title=COLLEGE%20FOOTBALL&betofferColumns=1,2,3";
+sports['pro_basketball'] = "sport=basketball&title=PRO%20BASKETBALL&betofferColumns=1,2,3,4";
+sports['college_basketball'] = "sport=basketball&title=COLLEGE%20BASKETBALL&betofferColumns=1,2,3,4";
+sports['pro_hockey'] = "sport=ice_hockey&title=HOCKEY&betofferColumns=1,2,3";
+sports['pro_tennis'] = "sport=tennis&title=TENNIS&betofferColumns=1,2,3";
+sports['pro_baseball'] = "sport=baseball&title=PRO%20BASEBALL&betofferColumns=1,2,3";
+sports['pro_boxing'] = "sport=boxing&title=PRO%20BOXING&couponId=223";
+sports['ufc_mma'] = "sport=martial_arts&title=UFC/MMA&couponId=255";
+sports['superbowl_futures'] = "sport=american_football&title=SUPERBOWL%20FUTURES&couponId=256";
+sports['nba_futures'] = "eventType=competition&couponId=259&daysInAdvance=365";
+sports['nba_east_futures'] = "eventType=competition&couponId=260&daysInAdvance=365";
+sports['nba_west_futures'] = "eventType=competition&couponId=261&daysInAdvance=365";
+sports['mlb_world_series_futures'] = "eventType=competition&couponId=262&daysInAdvance=365";
+
+odds_0.src = main_url + sports['pro_baseball'];
 
 
 </script>

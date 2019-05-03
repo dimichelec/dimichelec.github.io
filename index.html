@@ -98,6 +98,9 @@ function rotateOdds() {
 		odds_0.style.zIndex = -1;
 		odds_0.src = main_url + sports[odds_rotation[odds_rotation_index]];
 	} else {
+		odds_0.style.zIndex = 0;
+		odds_1.style.zIndex = -1;
+		odds_1.src = main_url + sports[odds_rotation[odds_rotation_index]];
 	}
 	odds_cache_toggle = !odds_cache_toggle;
 	incOddsRotation();

@@ -28,10 +28,10 @@
 <iframe id='odds_1' class='odds_frame'></iframe>
 <iframe id='ads_0'  class='ads_frame'></iframe>
 
-<script src="../src/js-yaml"></script>
+<script src="../src/yaml.js-develop/lib/Yaml.js"></script>
 <script>
 
-var doc = jsyaml.load('rotator.yml');
+var doc = YAML.load('rotator.yml');
 
 var odds_rotation_time = 5;	// in seconds
 var odds_rotation = [

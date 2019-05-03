@@ -12,8 +12,8 @@
 #odds_0 {
 	border-width: 0;
 	position:absolute;
-	top:50px; left:50px;
-	height:1100px; width:1500px;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
 }
 </style>
 
@@ -25,8 +25,10 @@
 
 var frame = document.getElementById('frame');
 frame.style.backgroundImage = "url('../img/rotator-frame.png')";
+frame.style.zIndex = 999; // front
 
 var odds_0 = document.getElementById('odds_0');
+odds_0.style.zIndex = 0; // middle
 
 var main_url =
    "https://c3-static.kambi.com/digital-signage-client/?"

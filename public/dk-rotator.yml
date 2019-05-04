@@ -3,6 +3,9 @@
 # DK Rotator Settings
 #####################################################################
 
+# seconds per settings update check
+settings_check_time: 5
+
 # seconds per screen
 odds_rotation_time: 5
 

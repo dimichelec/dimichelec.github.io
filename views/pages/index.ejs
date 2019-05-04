@@ -29,14 +29,75 @@
 <iframe id='odds_1' class='odds_frame'></iframe>
 <iframe id='ads_0'  class='ads_frame'></iframe>
 
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
 
+// ------------------------------------------------------------------
+// Settings Functions
+
+// check for a settings update, if there is one, get new settings
+function checkSettings() {
+	$.get('/getSettingsHash', function(res) {
+		if(res['hash'] != hash) getSettings();
+	});
+	setTimeout(checkSettings, settings_check_time*1000);
+}
+
+// get new settings from server
+function getSettings() {
+	$.get('/getSettings', function(res) {
+		hash = res['hash'];
+		settings = res['settings'];
+	});
+	copySettings();
+}
+
+// copy settings from structure to globals
+function copySettings() {
+	settings_check_time = settings.settings_check_time;	// in seconds 
+	odds_rotation_time  = settings.odds_rotation_time;	// in seconds
+	odds_rotation       = settings.odds_rotation;
+	main_url            = settings.main_url;
+	sports              = settings.sports;
+}
+
+
+// ------------------------------------------------------------------
+// Odds Boards Functions
+
+// flip precached board to top and start loading next board on back frame
+function rotateOdds() {
+	if (odds_cache_toggle) {
+		odds_1.style.zIndex = 0;
+		odds_0.style.zIndex = -1;
+		odds_0.src = main_url + sports[odds_rotation[odds_rotation_index]];
+	} else {
+		odds_0.style.zIndex = 0;
+		odds_1.style.zIndex = -1;
+		odds_1.src = main_url + sports[odds_rotation[odds_rotation_index]];
+	}
+	odds_cache_toggle = !odds_cache_toggle;
+	incOddsRotation();
+	setTimeout(rotateOdds, odds_rotation_time*1000);
+}
+
+// increment odds boards counter to next board in rotation
+function incOddsRotation() {
+	odds_rotation_index++;
+	if (odds_rotation_index >= odds_rotation.length) {
+		odds_rotation_index = 0;
+	}
+}
+
+
+// ------------------------------------------------------------------
+// Start of Execution
+
 // process settings
+var hash = <%-JSON.stringify(hash)%>
 var settings = <%-JSON.stringify(settings)%>
-var odds_rotation_time = settings.odds_rotation_time;	// in seconds
-var odds_rotation      = settings.odds_rotation;
-var main_url           = settings.main_url;
-var sports             = settings.sports;
+
+copySettings();
 
 // setup iframe stack
 var odds_cache_toggle = true;
@@ -56,32 +117,9 @@ incOddsRotation();
 odds_1.src = main_url + sports[odds_rotation[odds_rotation_index]];
 incOddsRotation();
 
-// start rotation
+// start rotation and start periodically checking for settings updates
 setTimeout(rotateOdds, odds_rotation_time*1000);
-
-
-function rotateOdds() {
-	if (odds_cache_toggle) {
-		odds_1.style.zIndex = 0;
-		odds_0.style.zIndex = -1;
-		odds_0.src = main_url + sports[odds_rotation[odds_rotation_index]];
-	} else {
-		odds_0.style.zIndex = 0;
-		odds_1.style.zIndex = -1;
-		odds_1.src = main_url + sports[odds_rotation[odds_rotation_index]];
-	}
-	odds_cache_toggle = !odds_cache_toggle;
-	incOddsRotation();
-	setTimeout(rotateOdds, odds_rotation_time*1000);
-}
-
-function incOddsRotation() {
-	odds_rotation_index++;
-	if (odds_rotation_index >= odds_rotation.length) {
-		odds_rotation_index = 0;
-	}
-}
+setTimeout(checkSettings, settings_check_time*1000);
 
 </script>
-
 </html>

@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "dk-rotator",
+  "version": "0.1.0",
+  "description": "A DraftKings Oddsboard and Ads rotator",
   "engines": {
     "node": "10.x"
   },
@@ -20,12 +20,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/dimichelec/dimichelec.github.io"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
   ],
-  "license": "MIT"
+  "license": ""
 }

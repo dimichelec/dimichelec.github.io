@@ -7,6 +7,8 @@
 	position:absolute;
 	top:0; left:0;
 	height:1200px; width:1600px;
+	background-image: url('../../public/assets/images/rotator-frame.png');
+	z-index: 999;
 }
 .odds_frame {
 	border-width: 0;
@@ -56,9 +58,6 @@ var frame = document.getElementById('frame');
 var odds_0 = document.getElementById('odds_0');
 var odds_1 = document.getElementById('odds_1');
 var ads_0 = document.getElementById('ads_0');
-
-frame.style.backgroundImage = "url('../img/rotator-frame.png')";
-frame.style.zIndex = 999; // front
 
 odds_0.style.zIndex = 0; // middle
 odds_1.style.zIndex = -1; // back

@@ -1,4 +1,48 @@
 ---
+#####################################################################
+# DK Rotator Settings
+#####################################################################
 
-? [ odds_rotation_time ]
-: - 5
+# seconds per screen
+odds_rotation_time: 5
+
+# list of odds boards in rotational order
+odds_rotation:
+  # - college_football
+  # - superbowl_futures
+  - pro_basketball
+  - nba_futures
+  - nba_east_futures
+  - nba_west_futures
+  - college_basketball
+  - pro_hockey
+  - pro_tennis
+  - pro_baseball
+  - mlb_ws_futures
+  - pro_boxing
+  - ufc_mma
+
+# main odds board URL
+main_url:
+   "https://c3-static.kambi.com/digital-signage-client/?\
+    offering=dkusnjrl&branding=draftkings&\
+    market=US&oddsFormat=american&locale=en_US&env=prod&\
+    loop=true&loopInterval=4000&"
+
+# odds boards
+sports:
+  pro_football:       sport=american_football&title=PRO%20FOOTBALL&betofferColumns=1,2,3,4
+  college_football:   sport=american_football&couponId=170&title=COLLEGE%20FOOTBALL&betofferColumns=1,2,3
+  pro_basketball:     sport=basketball&title=PRO%20BASKETBALL&betofferColumns=1,2,3,4
+  college_basketball: sport=basketball&title=COLLEGE%20BASKETBALL&betofferColumns=1,2,3,4
+  pro_hockey:         sport=ice_hockey&title=HOCKEY&betofferColumns=1,2,3
+  pro_tennis:         sport=tennis&title=TENNIS&betofferColumns=1,2,3
+  pro_baseball:       sport=baseball&title=PRO%20BASEBALL&betofferColumns=1,2,3
+  pro_boxing:         sport=boxing&title=PRO%20BOXING&couponId=223
+  ufc_mma:            sport=martial_arts&title=UFC/MMA&couponId=255
+  superbowl_futures:  sport=american_football&title=SUPERBOWL%20FUTURES&couponId=256
+  nba_futures:        eventType=competition&couponId=259&daysInAdvance=365
+  nba_east_futures:   eventType=competition&couponId=260&daysInAdvance=365
+  nba_west_futures:   eventType=competition&couponId=261&daysInAdvance=365
+  mlb_ws_futures:     eventType=competition&couponId=262&daysInAdvance=365
+

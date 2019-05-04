@@ -2,8 +2,9 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
-var yaml = require('js-yaml')
-var fs = require('fs')
+yaml = require('js-yaml')
+fs = require('fs')
+
 var doc = yaml.load(fs.readFile('dk-rotator.yaml','utf8'))
 
 

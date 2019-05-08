@@ -1,36 +1,8 @@
 
-const express = require('express');
-const path    = require('path');
-const yaml    = require('js-yaml');
-const fs      = require('fs');
-const crypto  = require('crypto');
-const PORT    = process.env.PORT || 5000;
-
-
-// calculate and return current hash of settings file
-function settingsHash() {
-	var hash = crypto
-		.createHash('md5')
-		.setEncoding('hex');
-	hash.write(
-		fs.readFileSync(
-			path.join(__dirname, 'public', 'dk-rotator.yml'),
-			'utf8'
-		)
-	);
-	hash.end();
-	return hash.read();
-}
-
-// read and return current settings
-function settings() {
-	return yaml.load(
-		fs.readFileSync(
-			path.join(__dirname, 'public', 'dk-rotator.yml'),
-			'utf8'
-		)
-	);
-}
+const express  = require('express');
+const path     = require('path');
+const PORT     = process.env.PORT || 5000;
+const settings = require('./settings.js');
 
 
 // Setup Server
@@ -40,14 +12,23 @@ express()
   .set('view engine', 'ejs')
   
   // root handler
-  .get('/', (req, res) => res.render('pages/index', {hash: settingsHash(), settings: settings()}))
+  .get('/', (req, res) => res.render('pages/index', {
+	hash: settings.getHash(),
+	settings: settings.getSettings()
+  }))
   
   // /getSettingsHas handler
-  .get('/getSettingsHash', function(req, res) {	res.send({hash: settingsHash()}); })
+  .get('/getSettingsHash', (req, res) => res.send({
+	hash: settings.getHash()
+  }))
   
   // /getSettings handler
-  .get('/getSettings', (req, res) => res.send({hash:settingsHash(), settings: settings()}))
+  .get('/getSettings', (req, res) => res.send({
+	hash: settings.getHash(),
+	settings: settings.getSettings()
+  }))
   
   // Start server
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
 

@@ -6,27 +6,43 @@
 # seconds per settings update check
 settings_check_time: 5
 
-# seconds per screen
-odds_rotation_time: 5
-
 # list of odds boards in rotational order
 odds_rotation:
-  # - college_football
-  # - superbowl_futures
-  - pro_basketball
-  - nba_futures
-  - nba_east_futures
-  - nba_west_futures
-  - college_basketball
-  - pro_hockey
-  - pro_tennis
-  - pro_baseball
-  - mlb_ws_futures
-  - pro_boxing
-  - ufc_mma
+  # - name: college_football
+  #   time: 5
+  # - name: superbowl_futures
+  #   time: 5
+  - name: pro_basketball
+    time: 5
+  - name: nba_futures
+    time: 5
+  - name: nba_east_futures
+    time: 5
+  - name: nba_west_futures
+    time: 5
+  - name: college_basketball
+    time: 5
+  - name: pro_hockey
+    time: 5
+  - name: pro_tennis
+    time: 5
+  - name: pro_baseball
+    time: 5
+  - name: mlb_ws_futures
+    time: 5
+  - name: pro_boxing
+    time: 5
+  - name: ufc_mma
+    time: 5
+
+ads_rotation:
+  - name: TEDad
+    time: 23
+  - name: ad2
+    time: 10
 
 # main odds board URL
-main_url:
+main_odds_url:
    "https://c3-static.kambi.com/digital-signage-client/?\
     offering=dkusnjrl&branding=draftkings&\
     market=US&oddsFormat=american&locale=en_US&env=prod&\
@@ -34,18 +50,41 @@ main_url:
 
 # odds boards
 sports:
-  pro_football:       sport=american_football&title=PRO%20FOOTBALL&betofferColumns=1,2,3,4
-  college_football:   sport=american_football&couponId=170&title=COLLEGE%20FOOTBALL&betofferColumns=1,2,3
-  pro_basketball:     sport=basketball&title=PRO%20BASKETBALL&betofferColumns=1,2,3,4
-  college_basketball: sport=basketball&title=COLLEGE%20BASKETBALL&betofferColumns=1,2,3,4
-  pro_hockey:         sport=ice_hockey&title=HOCKEY&betofferColumns=1,2,3
-  pro_tennis:         sport=tennis&title=TENNIS&betofferColumns=1,2,3
-  pro_baseball:       sport=baseball&title=PRO%20BASEBALL&betofferColumns=1,2,3
-  pro_boxing:         sport=boxing&title=PRO%20BOXING&couponId=223
-  ufc_mma:            sport=martial_arts&title=UFC/MMA&couponId=255
-  superbowl_futures:  sport=american_football&title=SUPERBOWL%20FUTURES&couponId=256
-  nba_futures:        eventType=competition&couponId=259&daysInAdvance=365
-  nba_east_futures:   eventType=competition&couponId=260&daysInAdvance=365
-  nba_west_futures:   eventType=competition&couponId=261&daysInAdvance=365
-  mlb_ws_futures:     eventType=competition&couponId=262&daysInAdvance=365
+  - name: pro_football
+    url:  sport=american_football&title=PRO%20FOOTBALL&betofferColumns=1,2,3,4
+  - name: college_football
+    url:  sport=american_football&couponId=170&title=COLLEGE%20FOOTBALL&betofferColumns=1,2,3
+  - name: pro_basketball
+    url:  sport=basketball&title=PRO%20BASKETBALL&betofferColumns=1,2,3,4
+  - name: college_basketball
+    url:  sport=basketball&title=COLLEGE%20BASKETBALL&betofferColumns=1,2,3,4
+  - name: pro_hockey
+    url:  sport=ice_hockey&title=HOCKEY&betofferColumns=1,2,3
+  - name: pro_tennis
+    url:  sport=tennis&title=TENNIS&betofferColumns=1,2,3
+  - name: pro_baseball
+    url:  sport=baseball&title=PRO%20BASEBALL&betofferColumns=1,2,3
+  - name: pro_boxing
+    url:  sport=boxing&title=PRO%20BOXING&couponId=223
+  - name: ufc_mma
+    url:  sport=martial_arts&title=UFC/MMA&couponId=255
+  - name: superbowl_futures
+    url:  sport=american_football&title=SUPERBOWL%20FUTURES&couponId=256
+  - name: nba_futures
+    url:  eventType=competition&couponId=259&daysInAdvance=365
+  - name: nba_east_futures
+    url:  eventType=competition&couponId=260&daysInAdvance=365
+  - name: nba_west_futures
+    url:  eventType=competition&couponId=261&daysInAdvance=365
+  - name: mlb_ws_futures
+    url: eventType=competition&couponId=262&daysInAdvance=365
 
+# advertisements
+ads:
+  - name: TEDad
+    url: https://www.youtube.com/embed/CeOadxT7kPA?enablejsapi=1&autoplay=1
+  - name: ad2
+    url: https://player.vimeo.com/video/286898202\
+ 
+ 
+ 

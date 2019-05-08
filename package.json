@@ -15,7 +15,8 @@
     "express": "^4.15.2",
     "fs": "0.0.1-security",
     "js-yaml": "^3.13.1",
-    "require": "^2.4.20"
+    "require": "^2.4.20",
+    "server": "^1.0.18"
   },
   "devDependencies": {
     "request": "^2.81.0",

@@ -83,11 +83,6 @@ function onYouTubeIframeAPIReady() {
 }
 
 
-****
-The next step is to use the YTplayer frames for caching and playing videos in the rotation function
-***
-
-
 // ------------------------------------------------------------------
 // Insert Control Functions
 
@@ -96,13 +91,34 @@ function rotateInserts() {
 	showing_insert = next_insert;
 	next_insert = getNextInsert();
 	if (insert_cache_toggle) {
-		insert_1.style.zIndex = 0;
+		if (showing_insert.type == 'YouTube') {
+			elYTplayer_1.style.zIndex = 0;
+			elYTplayer_1.playVideo();
+		} else {
+			insert_1.style.zIndex = 0;
+		}
+		elYTplayer_0.style.zIndex = -1;
 		insert_0.style.zIndex = -1;
-		insert_0.src = next_insert.url;
+		if (next_insert.type == 'YouTube') {
+			elYTplayer_0.videoId = next_insert.url;
+		} else {
+			insert_0.src = next_insert.url;
+		}
 	} else {
-		insert_0.style.zIndex = 0;
+
+		if (showing_insert.type == 'YouTube') {
+			elYTplayer_0.style.zIndex = 0;
+			elYTplayer_0.playVideo();
+		} else {
+			insert_0.style.zIndex = 0;
+		}
+		elYTplayer_1.style.zIndex = -1;
 		insert_1.style.zIndex = -1;
-		insert_1.src = next_insert.url;
+		if (next_insert.type == 'YouTube') {
+			elYTplayer_1.videoId = next_insert.url;
+		} else {
+			insert_1.src = next_insert.url;
+		}
 	}
 	insert_cache_toggle = !insert_cache_toggle;
 	setTimeout(rotateInserts, showing_insert.time*1000);
@@ -179,6 +195,8 @@ var next_insert;
 
 var insert_0 = document.getElementById('insert_0');
 var insert_1 = document.getElementById('insert_1');
+var elYTplayer_0 = document.getElementById('YTplayer_0');
+var elYTplayer_1 = document.getElementById('YTplayer_1');
 
 insert_0.style.zIndex =  0; // middle (just under image_frame)
 insert_1.style.zIndex = -1; // back (odds board staging)

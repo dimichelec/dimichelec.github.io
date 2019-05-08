@@ -82,8 +82,10 @@ sports:
 # advertisements
 ads:
   - name: TEDad
-    url: https://www.youtube.com/embed/CeOadxT7kPA?enablejsapi=1&autoplay=1
+    type: YouTube
+    url: CeOadxT7kPA
   - name: ad2
+    type: vimeo
     url: https://player.vimeo.com/video/286898202\
  
  

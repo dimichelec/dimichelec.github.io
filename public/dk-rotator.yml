@@ -37,9 +37,9 @@ odds_rotation:
 
 ads_rotation:
   - name: TEDad
-    time: 23
-  - name: ad2
     time: 10
+  - name: ad2
+    time: 9
 
 # main odds board URL
 main_odds_url:

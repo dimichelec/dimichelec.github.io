@@ -17,13 +17,20 @@
 	height:1120px; width:1520px;
 	background-color:black;
 }
+.ytplayer_div {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
+	background-color:black;
+}
 </style>
 
 <iframe id='image_frame'></iframe>
 <iframe id='insert_0' class='insert_frame'></iframe>
 <iframe id='insert_1' class='insert_frame'></iframe>
-<iframe id='YTplayer_0' class='YTplayer_frame'></iframe>
-<iframe id='YTplayer_1' class='YTplayer_frame'></iframe>
+<div id='ytplayer_0' class='ytplayer_div'></div>
+<div id='ytplayer_1' class='ytplayer_div'></div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://player.vimeo.com/api/player.js"></script>
@@ -48,9 +55,13 @@ function getSettings() {
 	});
 }
 
+function onPlayerReady(event) {
+	window[event.target.i.id + "_player_ready"] = true;
+}
 
-function onPlayerReady() {}
-function onPlayerStateChange() {}
+function onPlayerStateChange(event) {
+	var test = 0;
+}
 
 var tag = document.createElement('script');
 
@@ -58,23 +69,23 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var YTplayer_0;
-var YTplayer_1;
+var ytplayer_0;
+var ytplayer_1;
 function onYouTubeIframeAPIReady() {
-	YTplayer_0 = new YT.Player('YTplayer_0', {
-	  height: '390',
-	  width: '640',
-	  videoId: '',
+	ytplayer_0 = new YT.Player('ytplayer_0', {
+	  //height: '390',
+	  //width: '640',
+	  //videoId: 'M7lc1UVf-VE',
 	  events: {
 		'onReady': onPlayerReady,
 		'onStateChange': onPlayerStateChange
 	  }
 	});
 	
-	YTplayer_1 = new YT.Player('YTplayer_1', {
-	  height: '390',
-	  width: '640',
-	  videoId: '',
+	ytplayer_1 = new YT.Player('ytplayer_1', {
+	  //height: '390',
+	  //width: '640',
+	  //videoId: 'M7lc1UVf-VE',
 	  events: {
 		'onReady': onPlayerReady,
 		'onStateChange': onPlayerStateChange
@@ -92,32 +103,55 @@ function rotateInserts() {
 	next_insert = getNextInsert();
 	if (insert_cache_toggle) {
 		if (showing_insert.type == 'YouTube') {
-			elYTplayer_1.style.zIndex = 0;
-			elYTplayer_1.playVideo();
+			if(ytplayer_1_player_ready) {
+				eytplayer_1.style.zIndex = 0;
+				ytplayer_1.playVideoAt(0);
+				console.log("play ytplayer_1");
+			} else {
+				setTimeout(rotateInserts, showing_insert.time*1000);
+				console.log("skip playing ytplayer_1");
+				return;
+			}
 		} else {
 			insert_1.style.zIndex = 0;
+			console.log("show insert_1");
 		}
-		elYTplayer_0.style.zIndex = -1;
+		eytplayer_0.style.zIndex = -1;
 		insert_0.style.zIndex = -1;
 		if (next_insert.type == 'YouTube') {
-			elYTplayer_0.videoId = next_insert.url;
+			//ytplayer_0_player_ready = false;
+			ytplayer_0.loadVideoById(next_insert.url);
+			console.log("cue-up ytplayer_0:" + next_insert.url);
 		} else {
 			insert_0.src = next_insert.url;
+			console.log("cue-up insert_0");
 		}
 	} else {
 
 		if (showing_insert.type == 'YouTube') {
-			elYTplayer_0.style.zIndex = 0;
-			elYTplayer_0.playVideo();
+			if(ytplayer_0_player_ready) {
+				eytplayer_0.style.zIndex = 0;
+				ytplayer_0.playVideoAt(0);
+				console.log("play ytplayer_0");
+			} else {
+				setTimeout(rotateInserts, showing_insert.time*1000);
+				console.log("skip playing ytplayer_0");
+				return;
+			}
 		} else {
 			insert_0.style.zIndex = 0;
+			console.log("show insert_0");
 		}
-		elYTplayer_1.style.zIndex = -1;
+		eytplayer_1.style.zIndex = -1;
 		insert_1.style.zIndex = -1;
 		if (next_insert.type == 'YouTube') {
-			elYTplayer_1.videoId = next_insert.url;
+			//ytplayer_1_player_ready = false;
+			ytplayer_1.clearVideo();
+			ytplayer_1.loadVideoById(next_insert.url);
+			console.log("cue-up ytplayer_1: " + next_insert.url);
 		} else {
 			insert_1.src = next_insert.url;
+			console.log("cue-up insert_1");
 		}
 	}
 	insert_cache_toggle = !insert_cache_toggle;
@@ -160,12 +194,12 @@ function incOddsRotation() {
 
 // get current ad URL based on the ads_rotation_index
 function getAdsUrlTime() {
-	url = settings.ads.find(
+	ad = settings.ads.find(
 		ad => ad.name === settings.ads_rotation[ads_rotation_index].name
-	).url;
+	);
 	time = settings.ads_rotation[ads_rotation_index].time;
 	incAdsRotation();
-	return { url: url, time: time, type: 'video' };
+	return { url: ad.url, time: time, type: ad.type };
 }
 
 // increment ads counter to next ad in rotation
@@ -195,18 +229,30 @@ var next_insert;
 
 var insert_0 = document.getElementById('insert_0');
 var insert_1 = document.getElementById('insert_1');
-var elYTplayer_0 = document.getElementById('YTplayer_0');
-var elYTplayer_1 = document.getElementById('YTplayer_1');
+var eytplayer_0 = document.getElementById('ytplayer_0');
+var eytplayer_1 = document.getElementById('ytplayer_1');
+var ytplayer_0_player_ready = false;
+var ytplayer_1_player_ready = false;
 
 insert_0.style.zIndex =  0; // middle (just under image_frame)
-insert_1.style.zIndex = -1; // back (odds board staging)
+insert_1.style.zIndex = -1; // back
+eytplayer_0.style.zIndex = -1;
+eytplayer_1.style.zIndex = -1;
 
 // load up first 2 inserts
 showing_insert = getNextInsert();
-insert_0.src = showing_insert.url;
+if (showing_insert.type == 'YouTube') {
+	ytplayer_0.loadVideoById(showing_insert.url);
+} else {
+	insert_0.src = showing_insert.url;
+}
 
 next_insert = getNextInsert();
-insert_1.src = next_insert.url;
+if (next_insert.type == 'YouTube') {
+	ytplayer_1.loadVideoById(next_insert.url);
+} else {
+	insert_1.src = next_insert.url;
+}
 
 // start rotation and start periodically checking for settings updates
 setTimeout(rotateInserts, showing_insert.time*1000);

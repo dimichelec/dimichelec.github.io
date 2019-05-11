@@ -3,19 +3,12 @@
 <link href="/stylesheets/main.css" rel="stylesheet">
 
 <iframe id='image_frame'></iframe>
-<<<<<<< HEAD
 <iframe id='odds' class='odds_frame'></iframe>
 <div id='player' class='player_div'></div>
 <div id='curtain' class='curtain_div'></div>
 <div id='playerMaskTop' class='playerMaskTop_div'></div>
 <div id='playerMaskBottom' class='playerMaskBottom_div'></div>
 <div id='playerImage' class='playerImage_div'></div>
-
-=======
-<iframe id='insert_0' class='insert_frame'></iframe>
-<iframe id='insert_1' class='insert_frame'></iframe>
-<div id='ytplayer' class='ytplayer_div'></div>
->>>>>>> refs/remotes/origin/master
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/scripts/settings.js"></script>
@@ -26,23 +19,8 @@
 // Settings Vars 
 //
 
-<<<<<<< HEAD
 var hash = <%-JSON.stringify(hash)%>
 var settings = <%-JSON.stringify(settings)%>
-=======
-// get new settings from server
-function getSettings() {
-	$.get('/getSettings', function(res) {
-		hash = res['hash'];
-		settings = res['settings'];
-	});
-}
-
-function onPlayerReady(event) {
-	event.target.playVideo();
-	event.target.mute();
-}
->>>>>>> refs/remotes/origin/master
 
 
 // ------------------------------------------------------------------
@@ -53,7 +31,6 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-<<<<<<< HEAD
 var player;
 function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
@@ -62,15 +39,6 @@ function onYouTubeIframeAPIReady() {
 		'controls': 0,
 		'modestbranding':1
       },
-=======
-var ytplayer;
-function onYouTubeIframeAPIReady() {
-	ytplayer = new YT.Player('ytplayer', {
-	  //height: '390',
-	  //width: '640',
-	  //muted: true,
-	  //videoId: 'M7lc1UVf-VE',
->>>>>>> refs/remotes/origin/master
 	  events: {
 		'onReady': onPlayerReady,
 		'onStateChange': onPlayerStateChange
@@ -145,7 +113,6 @@ function showPlayer() {
 
 // flip precached insert to top and start loading next insert on back frame
 function rotateInserts() {
-<<<<<<< HEAD
 	$("#curtain").fadeIn(settings.fade_out_time, function() {
 	
 		showing_insert = getNextInsert();
@@ -160,44 +127,6 @@ function rotateInserts() {
 		}
 
 	});
-=======
-	ytplayer.stopVideo();
-	showing_insert = next_insert;
-	next_insert = getNextInsert();
-	if (showing_insert.type == 'YouTube') {
-		eytplayer.style.zIndex = 0;
-		ytplayer.loadVideoById(showing_insert.url);
-		
-		insert_0.style.zIndex = -1;
-		insert_1.style.zIndex = -1;
-		if (next_insert.type != 'YouTube') {
-			if (insert_cache_toggle) {
-				insert_0.src = next_insert.url;
-			} else {
-				insert_1.src = next_insert.url;
-			}
-			insert_cache_toggle = !insert_cache_toggle;
-		}
-	} else {
-		if (insert_cache_toggle) {
-			insert_1.style.zIndex = 0;
-			insert_0.style.zIndex = -1;
-		} else {
-			insert_0.style.zIndex = 0;
-			insert_1.style.zIndex = -1;
-		}
-		if (next_insert.type != 'YouTube') {
-			if (insert_cache_toggle) {
-				insert_0.src = next_insert.url;
-			} else {
-				insert_1.src = next_insert.url;
-			}
-			insert_cache_toggle = !insert_cache_toggle;
-		}
-	}
-	
-	setTimeout(rotateInserts, showing_insert.time*1000);
->>>>>>> refs/remotes/origin/master
 }
 
 function getNextInsert() {
@@ -272,7 +201,6 @@ var player_buffer = true;
 var odds_buffer = true;
 
 var showing_insert;
-<<<<<<< HEAD
 
 // catch the load event of the odds display and carry-out the transition
 $("#odds").on('load', function() {
@@ -282,36 +210,6 @@ $("#odds").on('load', function() {
 		setTimeout(rotateInserts, showing_insert.time*1000);
 	}, 1000); 
 });
-=======
-var next_insert;
-
-var insert_0 = document.getElementById('insert_0');
-var insert_1 = document.getElementById('insert_1');
-var eytplayer = document.getElementById('ytplayer');
-
-insert_0.style.zIndex  = -1;
-insert_1.style.zIndex  = -1;
-eytplayer.style.zIndex = -1;
-
-// load up first 2 inserts
-showing_insert = getNextInsert();
-if (showing_insert.type == 'YouTube') {
-	ytplayer.loadVideoById(showing_insert.url);
-	eytplayer.style.zIndex = 0;
-	next_insert = getNextInsert();
-	if (next_insert.type != 'YouTube') {
-		insert_0.src = next_insert.url;
-	}
-} else {
-	insert_0.src = showing_insert.url;
-	insert_0.style.zIndex  = 0;
-	next_insert = getNextInsert();
-	if (next_insert.type != 'YouTube') {
-		insert_1.src = next_insert.url;
-	}
-}
-
->>>>>>> refs/remotes/origin/master
 
 // start rotation and start periodically checking for settings updates
 setTimeout(checkSettings, settings.settings_check_time*1000);

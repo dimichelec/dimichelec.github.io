@@ -36,7 +36,7 @@ function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
 	  playerVars: {
 		'autoplay': 1,
-		//'controls': 0,
+		'controls': 0,
 		'modestbranding':1
       },
 	  events: {
@@ -82,7 +82,7 @@ function showOdds() {
 	$('#playerImage').hide();
 	$('#playerMaskTop').hide();
 	$('#playerMaskBottom').hide();
-	$('#curtain').fadeOut(settings.fade_in_time);
+	$('#curtain').fadeOut(settings.fadein_time*1000);
 }
 
 function showPlayer() {
@@ -91,7 +91,7 @@ function showPlayer() {
 	$('#playerImage').hide();
 	$('#playerMaskTop').show();
 	$('#playerMaskBottom').show();
-	$('#curtain').fadeOut(settings.fade_in_time);
+	$('#curtain').fadeOut(settings.fadein_time*1000);
 	
 	// if there's an image member included with this ad,
 	// this will ease-in the video's ad freeze frame 2 seconds
@@ -103,7 +103,7 @@ function showPlayer() {
 					'background-image',
 					'url(images/' + showing_insert.image + ')'
 				);
-				$('#playerImage').fadeIn(200);
+				$('#playerImage').fadeIn(100);
 			},
 			(showing_insert.endtime - showing_insert.starttime - 2) * 1000
 		);
@@ -113,19 +113,19 @@ function showPlayer() {
 
 // flip precached insert to top and start loading next insert on back frame
 function rotateInserts() {
-	$("#curtain").fadeIn(settings.fade_out_time, function() {
-	
-		showing_insert = getNextInsert();
-		if(showing_insert.type == "YouTube") {
-			player.loadVideoById(
-				{'videoId': showing_insert.url,
-				 'startSeconds': showing_insert.starttime,
-				 'endSeconds': showing_insert.endtime
-			});
-		} else {
-			$("#odds").attr('src', showing_insert.url);
-		}
-
+	$("#curtain").fadeIn(settings.fadeout_time*1000, function() {
+		setTimeout(function() {
+			showing_insert = getNextInsert();
+			if(showing_insert.type == "YouTube") {
+				player.loadVideoById(
+					{'videoId': showing_insert.url,
+					 'startSeconds': showing_insert.starttime,
+					 'endSeconds': showing_insert.endtime
+				});
+			} else {
+				$("#odds").attr('src', showing_insert.url);
+			}
+		}, settings.curtain_hangtime*1000);
 	});
 }
 

@@ -33,13 +33,7 @@ odds_rotation:
 ads_rotation:
   - name: BWWad1
   - name: TEDad
-<<<<<<< HEAD
   - name: GoogleDevAd
-=======
-    time: 10
-  - name: ad2
-    time: 9
->>>>>>> refs/remotes/origin/master
 
 # main odds board URL
 main_odds_url:

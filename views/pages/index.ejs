@@ -36,7 +36,7 @@ function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
 	  playerVars: {
 		'autoplay': 1,
-		'controls': 0,
+		//'controls': 0,
 		'modestbranding':1
       },
 	  events: {
@@ -62,7 +62,7 @@ function onPlayerStateChange(event) {
 			if(showing_insert.hangtime === undefined) {
 				rotateInserts();
 			} else {
-				setTimeout(rotateInserts(), showing_insert.hangtime*1000);
+				setTimeout(function() { rotateInserts(); }, showing_insert.hangtime*1000);
 			}
 		}
 	}
@@ -103,7 +103,7 @@ function showPlayer() {
 					'background-image',
 					'url(images/' + showing_insert.image + ')'
 				);
-				$('#playerImage').fadeIn(100);
+				$('#playerImage').fadeIn(200);
 			},
 			(showing_insert.endtime - showing_insert.starttime - 2) * 1000
 		);
@@ -207,12 +207,12 @@ $("#odds").on('load', function() {
 	// wait a second after load is complete for odds board to settle
 	setTimeout(function() {
 		showOdds();
-		setTimeout(rotateInserts, showing_insert.time*1000);
+		setTimeout(function() {rotateInserts(); }, showing_insert.time*1000);
 	}, 1000); 
 });
 
 // start rotation and start periodically checking for settings updates
-setTimeout(checkSettings, settings.settings_check_time*1000);
+setTimeout(function() { checkSettings(); }, settings.settings_check_time*1000);
 
 </script>
 </html>

@@ -27,6 +27,7 @@ odds_rotation:
   - name: pro_tennis
   - name: pro_baseball
   - name: mlb_ws_futures
+    time: 5
   - name: pro_boxing
   - name: ufc_mma
 
@@ -81,7 +82,7 @@ ads:
     starttime: 27
     endtime: 32
     image: BWWad1.png
-    hangtime: 3
+    hangtime: 2
   - name: TEDad
     type: YouTube
     url: CeOadxT7kPA

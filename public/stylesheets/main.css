@@ -6,7 +6,7 @@
 	background-image:url('../images/rotator-frame.png');
 	z-index:999;
 }
-.curtain_div {
+#curtain {
 	border-width: 0;
 	position:absolute;
 	top:0; left:0;
@@ -15,7 +15,7 @@
 	background-color:black;
 	z-index:998;
 }
-.odds_frame {
+#odds {
 	border-width: 0;
 	position:absolute;
 	top:33px; left:33px;
@@ -23,7 +23,7 @@
 	background-color:black;
 	z-index: -1;
 }
-.player_div {
+#player {
 	border-width: 0;
 	position:absolute;
 	top:33px; left:33px;
@@ -31,7 +31,7 @@
 	background-color:black;
 	z-index: -1;
 }
-.playerImage_div {
+#playerImage {
 	border-width: 0;
 	position:absolute;
 	top:0; left:0;
@@ -39,7 +39,7 @@
 	background-color:black;
 	z-index: 996;
 }
-.playerMaskTop_div {
+#playerMaskTop {
 	border-width: 0;
 	position:absolute;
 	top:33px; left:33px;
@@ -47,7 +47,7 @@
 	background-color:black;
 	z-index:997;
 }
-.playerMaskBottom_div {
+#playerMaskBottom {
 	border-width: 0;
 	position:absolute;
 	top:797px; left:33px;

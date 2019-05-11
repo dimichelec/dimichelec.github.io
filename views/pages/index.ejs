@@ -1,161 +1,133 @@
 <!DOCTYPE html>
 <html>
-
-<style>
-#image_frame {
-	border-width: 0;
-	position:absolute;
-	top:0; left:0;
-	height:1200px; width:1600px;
-	background-image: url('assets/images/rotator-frame.png');
-	z-index: 999;
-}
-.insert_frame {
-	border-width: 0;
-	position:absolute;
-	top:40px; left:40px;
-	height:1120px; width:1520px;
-	background-color:black;
-}
-.ytplayer_div {
-	border-width: 0;
-	position:absolute;
-	top:40px; left:40px;
-	height:1120px; width:1520px;
-	background-color:black;
-}
-</style>
+<link href="/stylesheets/main.css" rel="stylesheet">
 
 <iframe id='image_frame'></iframe>
-<iframe id='insert_0' class='insert_frame'></iframe>
-<iframe id='insert_1' class='insert_frame'></iframe>
-<div id='ytplayer_0' class='ytplayer_div'></div>
-<div id='ytplayer_1' class='ytplayer_div'></div>
+<iframe id='odds' class='odds_frame'></iframe>
+<div id='player' class='player_div'></div>
+<div id='curtain' class='curtain_div'></div>
+<div id='playerMaskTop' class='playerMaskTop_div'></div>
+<div id='playerMaskBottom' class='playerMaskBottom_div'></div>
+<div id='playerImage' class='playerImage_div'></div>
+
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://player.vimeo.com/api/player.js"></script>
+<script src="/scripts/settings.js"></script>
 <script>
+"use strict";
 
 // ------------------------------------------------------------------
-// Settings Functions
+// Settings Vars 
+//
 
-// check for a settings update, if there is one, get new settings
-function checkSettings() {
-	$.get('/getSettingsHash', function(res) {
-		if(res['hash'] != hash) getSettings();
-	});
-	setTimeout(checkSettings, settings.settings_check_time*1000);
-}
+var hash = <%-JSON.stringify(hash)%>
+var settings = <%-JSON.stringify(settings)%>
 
-// get new settings from server
-function getSettings() {
-	$.get('/getSettings', function(res) {
-		hash = res['hash'];
-		settings = res['settings'];
-	});
-}
 
-function onPlayerReady(event) {
-	window[event.target.i.id + "_player_ready"] = true;
-}
-
-function onPlayerStateChange(event) {
-	var test = 0;
-}
-
+// ------------------------------------------------------------------
+// YouTube Player 
+//
 var tag = document.createElement('script');
-
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var ytplayer_0;
-var ytplayer_1;
+var player;
 function onYouTubeIframeAPIReady() {
-	ytplayer_0 = new YT.Player('ytplayer_0', {
-	  //height: '390',
-	  //width: '640',
-	  //videoId: 'M7lc1UVf-VE',
+	player = new YT.Player('player', {
+	  playerVars: {
+		'autoplay': 1,
+		'controls': 0,
+		'modestbranding':1
+      },
 	  events: {
 		'onReady': onPlayerReady,
 		'onStateChange': onPlayerStateChange
 	  }
 	});
-	
-	ytplayer_1 = new YT.Player('ytplayer_1', {
-	  //height: '390',
-	  //width: '640',
-	  //videoId: 'M7lc1UVf-VE',
-	  events: {
-		'onReady': onPlayerReady,
-		'onStateChange': onPlayerStateChange
-	  }
-	});
+}
+
+var player_latch = false;	// use a latch to deal with bouncing ENDED state changes
+
+// this is only triggered on initializing the player
+function onPlayerReady(event) {
+	event.target.mute();
+	rotateInserts();
+}
+
+// we're using this event to transition to a video, or rotate when a video completes
+function onPlayerStateChange(event) {
+	if(event.data == YT.PlayerState.ENDED) {
+		if(player_latch) {
+			player_latch = false;
+			if(showing_insert.hangtime === undefined) {
+				rotateInserts();
+			} else {
+				setTimeout(rotateInserts(), showing_insert.hangtime*1000);
+			}
+		}
+	}
+	if(event.data == YT.PlayerState.PLAYING) {
+		showPlayer();
+		player_latch = true;
+	}
 }
 
 
 // ------------------------------------------------------------------
 // Insert Control Functions
 
+function showOdds() {
+	$('#player').css('zIndex',-1);
+	$('#odds').css('zIndex',0);
+	$('#playerImage').hide();
+	$('#playerMaskTop').hide();
+	$('#playerMaskBottom').hide();
+	$('#curtain').fadeOut(settings.fade_in_time);
+}
+
+function showPlayer() {
+	$('#odds').css('zIndex',-1);
+	$('#player').css('zIndex',0);
+	$('#playerImage').hide();
+	$('#playerMaskTop').show();
+	$('#playerMaskBottom').show();
+	$('#curtain').fadeOut(settings.fade_in_time);
+	
+	// if there's an image member included with this ad,
+	// this will ease-in the video's ad freeze frame 2 seconds
+	// before the end of the clip
+	if(showing_insert.image !== undefined) {
+		setTimeout(
+			function() {
+				$('#playerImage').css(
+					'background-image',
+					'url(images/' + showing_insert.image + ')'
+				);
+				$('#playerImage').fadeIn(100);
+			},
+			(showing_insert.endtime - showing_insert.starttime - 2) * 1000
+		);
+	}
+}
+
+
 // flip precached insert to top and start loading next insert on back frame
 function rotateInserts() {
-	showing_insert = next_insert;
-	next_insert = getNextInsert();
-	if (insert_cache_toggle) {
-		if (showing_insert.type == 'YouTube') {
-			if(ytplayer_1_player_ready) {
-				eytplayer_1.style.zIndex = 0;
-				ytplayer_1.playVideoAt(0);
-				console.log("play ytplayer_1");
-			} else {
-				setTimeout(rotateInserts, showing_insert.time*1000);
-				console.log("skip playing ytplayer_1");
-				return;
-			}
+	$("#curtain").fadeIn(settings.fade_out_time, function() {
+	
+		showing_insert = getNextInsert();
+		if(showing_insert.type == "YouTube") {
+			player.loadVideoById(
+				{'videoId': showing_insert.url,
+				 'startSeconds': showing_insert.starttime,
+				 'endSeconds': showing_insert.endtime
+			});
 		} else {
-			insert_1.style.zIndex = 0;
-			console.log("show insert_1");
+			$("#odds").attr('src', showing_insert.url);
 		}
-		eytplayer_0.style.zIndex = -1;
-		insert_0.style.zIndex = -1;
-		if (next_insert.type == 'YouTube') {
-			//ytplayer_0_player_ready = false;
-			ytplayer_0.loadVideoById(next_insert.url);
-			console.log("cue-up ytplayer_0:" + next_insert.url);
-		} else {
-			insert_0.src = next_insert.url;
-			console.log("cue-up insert_0");
-		}
-	} else {
 
-		if (showing_insert.type == 'YouTube') {
-			if(ytplayer_0_player_ready) {
-				eytplayer_0.style.zIndex = 0;
-				ytplayer_0.playVideoAt(0);
-				console.log("play ytplayer_0");
-			} else {
-				setTimeout(rotateInserts, showing_insert.time*1000);
-				console.log("skip playing ytplayer_0");
-				return;
-			}
-		} else {
-			insert_0.style.zIndex = 0;
-			console.log("show insert_0");
-		}
-		eytplayer_1.style.zIndex = -1;
-		insert_1.style.zIndex = -1;
-		if (next_insert.type == 'YouTube') {
-			//ytplayer_1_player_ready = false;
-			ytplayer_1.clearVideo();
-			ytplayer_1.loadVideoById(next_insert.url);
-			console.log("cue-up ytplayer_1: " + next_insert.url);
-		} else {
-			insert_1.src = next_insert.url;
-			console.log("cue-up insert_1");
-		}
-	}
-	insert_cache_toggle = !insert_cache_toggle;
-	setTimeout(rotateInserts, showing_insert.time*1000);
+	});
 }
 
 function getNextInsert() {
@@ -163,7 +135,7 @@ function getNextInsert() {
 		return getNextOdds();
 	}
 	odds_count = 0;
-	return getAdsUrlTime();
+	return getNextAd();
 }
 
 
@@ -172,10 +144,11 @@ function getNextInsert() {
 
 // get current odds board URL based on the odds_rotation_index
 function getNextOdds() {
-	url = settings.main_odds_url + settings.sports.find(
+	var url = settings.main_odds_url + settings.sports.find(
 		sport => sport.name === settings.odds_rotation[odds_rotation_index].name
 	).url;
-	time = settings.odds_rotation[odds_rotation_index].time;
+	var time = settings.odds_rotation[odds_rotation_index].time;
+	if(time == null) time = settings.odds_rotation_time_default;
 	incOddsRotation();
 	return { url: url, time: time, type: 'odds' };
 }
@@ -193,30 +166,30 @@ function incOddsRotation() {
 // Ads Functions
 
 // get current ad URL based on the ads_rotation_index
-function getAdsUrlTime() {
-	ad = settings.ads.find(
+function getNextAd() {
+	var ad = settings.ads.find(
 		ad => ad.name === settings.ads_rotation[ads_rotation_index].name
 	);
-	time = settings.ads_rotation[ads_rotation_index].time;
-	incAdsRotation();
-	return { url: ad.url, time: time, type: ad.type };
-}
 
-// increment ads counter to next ad in rotation
-function incAdsRotation() {
+	// increment ads counter to next ad in rotation
 	ads_rotation_index++;
 	if (ads_rotation_index >= settings.ads_rotation.length) {
 		ads_rotation_index = 0;
 	}
+
+	return {
+		type: ad.type,
+		url: ad.url,
+		starttime: ad.starttime,
+		endtime: ad.endtime,
+		image: ad.image,
+		hangtime: ad.hangtime
+	};
 }
 
 
 // ------------------------------------------------------------------
 // Start of Execution
-
-// process settings
-var hash = <%-JSON.stringify(hash)%>
-var settings = <%-JSON.stringify(settings)%>
 
 // setup iframe stack
 var insert_cache_toggle = true;
@@ -224,38 +197,22 @@ var odds_rotation_index = 0;
 var ads_rotation_index = 0;
 var odds_count_setting = 2;
 var odds_count = 0;
+
+var player_buffer = true;
+var odds_buffer = true;
+
 var showing_insert;
-var next_insert;
 
-var insert_0 = document.getElementById('insert_0');
-var insert_1 = document.getElementById('insert_1');
-var eytplayer_0 = document.getElementById('ytplayer_0');
-var eytplayer_1 = document.getElementById('ytplayer_1');
-var ytplayer_0_player_ready = false;
-var ytplayer_1_player_ready = false;
-
-insert_0.style.zIndex =  0; // middle (just under image_frame)
-insert_1.style.zIndex = -1; // back
-eytplayer_0.style.zIndex = -1;
-eytplayer_1.style.zIndex = -1;
-
-// load up first 2 inserts
-showing_insert = getNextInsert();
-if (showing_insert.type == 'YouTube') {
-	ytplayer_0.loadVideoById(showing_insert.url);
-} else {
-	insert_0.src = showing_insert.url;
-}
-
-next_insert = getNextInsert();
-if (next_insert.type == 'YouTube') {
-	ytplayer_1.loadVideoById(next_insert.url);
-} else {
-	insert_1.src = next_insert.url;
-}
+// catch the load event of the odds display and carry-out the transition
+$("#odds").on('load', function() {
+	// wait a second after load is complete for odds board to settle
+	setTimeout(function() {
+		showOdds();
+		setTimeout(rotateInserts, showing_insert.time*1000);
+	}, 1000); 
+});
 
 // start rotation and start periodically checking for settings updates
-setTimeout(rotateInserts, showing_insert.time*1000);
 setTimeout(checkSettings, settings.settings_check_time*1000);
 
 </script>

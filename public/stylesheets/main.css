@@ -1,27 +1,57 @@
-.jumbotron {
-  background: #532F8C;
-  color: white;
-  padding-bottom: 80px; }
-  .jumbotron .btn-primary {
-    background: #845ac7;
-    border-color: #845ac7; }
-    .jumbotron .btn-primary:hover {
-      background: #7646c1; }
-  .jumbotron p {
-    color: #d9ccee;
-    max-width: 75%;
-    margin: 1em auto 2em; }
-  .navbar + .jumbotron {
-    margin-top: -20px; }
-  .jumbotron .lang-logo {
-    display: block;
-    background: #B01302;
-    border-radius: 50%;
-    overflow: hidden;
-    width: 100px;
-    height: 100px;
-    margin: auto;
-    border: 2px solid white; }
-    .jumbotron .lang-logo img {
-      max-width: 100%; }
-
+#image_frame {
+	border-width:0;
+	position:absolute;
+	top:0; left:0;
+	height:1200px; width:1600px;
+	background-image:url('../images/rotator-frame.png');
+	z-index:999;
+}
+.odds_frame {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
+	background-color:black;
+	z-index: -1;
+}
+.player_div {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
+	background-color:black;
+	z-index: -1;
+}
+.playerImage_div {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
+	background-color:black;
+	z-index: 996;
+}
+.playerMaskTop_div {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:70px; width:1520px;
+	background-color:black;
+	z-index:997;
+}
+.playerMaskBottom_div {
+	border-width: 0;
+	position:absolute;
+	top:1090px; left:40px;
+	height:70px; width:1520px;
+	background-color:black;
+	z-index:997;
+}
+.curtain_div {
+	border-width: 0;
+	position:absolute;
+	top:40px; left:40px;
+	height:1120px; width:1520px;
+	background-image:url('../images/draftkings-curtain.png');
+	background-color:black;
+	z-index:998;
+}

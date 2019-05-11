@@ -6,14 +6,16 @@
 # seconds per settings update check
 settings_check_time: 5
 
+# transitioning fade out in milliseconds
+fade_out_time: 1000
+
+# transitioning fade in in milliseconds
+fade_in_time: 1000
+
 # list of odds boards in rotational order
+odds_rotation_time_default: 3
 odds_rotation:
-  # - name: college_football
-  #   time: 5
-  # - name: superbowl_futures
-  #   time: 5
   - name: pro_basketball
-    time: 5
   - name: nba_futures
     time: 5
   - name: nba_east_futures
@@ -21,25 +23,17 @@ odds_rotation:
   - name: nba_west_futures
     time: 5
   - name: college_basketball
-    time: 5
   - name: pro_hockey
-    time: 5
   - name: pro_tennis
-    time: 5
   - name: pro_baseball
-    time: 5
   - name: mlb_ws_futures
-    time: 5
   - name: pro_boxing
-    time: 5
   - name: ufc_mma
-    time: 5
 
 ads_rotation:
+  - name: BWWad1
   - name: TEDad
-    time: 23
-  - name: ad2
-    time: 10
+  - name: GoogleDevAd
 
 # main odds board URL
 main_odds_url:
@@ -81,12 +75,25 @@ sports:
 
 # advertisements
 ads:
+  - name: BWWad1
+    type: YouTube
+    url: Az17OGOXPiY
+    starttime: 27
+    endtime: 32
+    image: BWWad1.png
+    hangtime: 3
   - name: TEDad
     type: YouTube
     url: CeOadxT7kPA
-  - name: ad2
+    starttime: 0
+    endtime: 9
+    image: TEDad.png
+  - name: GoogleDevAd
     type: YouTube
     url: M7lc1UVf-VE
+    starttime: 0
+    endtime: 9
+    image: GoogleDevAd.png
  
  
  

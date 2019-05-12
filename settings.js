@@ -4,6 +4,7 @@ const yaml    = require('js-yaml');
 const fs      = require('fs');
 const crypto  = require('crypto');
 
+const configFile = 'data/configuration.yml';
 
 // calculate and return current hash of settings file
 exports.getHash = function() {
@@ -12,7 +13,7 @@ exports.getHash = function() {
 		.setEncoding('hex');
 	hash.write(
 		fs.readFileSync(
-			path.join(__dirname, 'public', 'dk-rotator.yml'),
+			path.join(__dirname, 'public', configFile),
 			'utf8'
 		)
 	);
@@ -24,7 +25,7 @@ exports.getHash = function() {
 exports.getSettings = function() {
 	return yaml.load(
 		fs.readFileSync(
-			path.join(__dirname, 'public', 'dk-rotator.yml'),
+			path.join(__dirname, 'public', configFile),
 			'utf8'
 		)
 	);

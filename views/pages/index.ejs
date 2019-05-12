@@ -97,15 +97,13 @@ function showPlayer() {
 	// this will ease-in the video's ad freeze frame 2 seconds
 	// before the end of the clip
 	if(showing_insert.image !== undefined) {
-		setTimeout(
-			function() {
-				$('#playerImage').css(
-					'background-image',
-					'url(images/' + showing_insert.image + ')'
-				);
-				$('#playerImage').fadeIn(100);
-			},
-			(showing_insert.endtime - showing_insert.starttime - 2) * 1000
+		$('#playerImage').css(
+			'background-image',
+			'url(images/' + showing_insert.image + ')'
+		);
+		setTimeout(function() {
+			$('#playerImage').fadeIn(100);
+			},(showing_insert.endtime - showing_insert.starttime - 2) * 1000
 		);
 	}
 }
